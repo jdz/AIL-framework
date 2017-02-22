@@ -272,19 +272,19 @@ function create_log_table(obj_json) {
     tr.appendChild(inspect);
 
     if (tr.className == document.getElementById("checkbox_log_info").value && document.getElementById("checkbox_log_info").checked  == true) {
-           tableBody.appendChild(tr);
-       }
+        tableBody.insertBefore(tr, tableBody.firstChild);
+    }
     if (tr.className == document.getElementById("checkbox_log_warning").value && document.getElementById("checkbox_log_warning").checked == true) {
-        tableBody.appendChild(tr);
+        tableBody.insertBefore(tr, tableBody.firstChild);
     }
     if (tr.className == document.getElementById("checkbox_log_critical").value && document.getElementById("checkbox_log_critical").checked == true) {
-        tableBody.appendChild(tr);
+        tableBody.insertBefore(tr, tableBody.firstChild);
     };
 
     var sel = document.getElementById("log_select")
     if (tableBody.rows.length > sel.options[sel.options.selectedIndex].value){
         while (tableBody.rows.length != sel.options[sel.options.selectedIndex].value){
-            tableBody.deleteRow(0);
+            tableBody.deleteRow(-1);
         }
     }
 }
