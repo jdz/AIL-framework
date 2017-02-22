@@ -81,7 +81,6 @@ if __name__ == "__main__":
         filename = p.get_from_set()
         if filename is None:
             publisher.debug("Script Categ is Idling 10s")
-            print 'Sleeping'
             time.sleep(10)
             continue
 

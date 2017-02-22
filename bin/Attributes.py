@@ -51,7 +51,6 @@ if __name__ == "__main__":
                 PST = Paste.Paste(message)
             else:
                 publisher.debug("Script Attribute is idling 1s")
-                print 'sleeping'
                 time.sleep(1)
                 continue
 

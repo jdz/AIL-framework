@@ -139,6 +139,5 @@ if __name__ == "__main__":
                                                       month)
 
             publisher.debug("Script Curve is Idling")
-            print "sleeping"
             time.sleep(10)
         message = p.get_from_set()

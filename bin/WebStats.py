@@ -156,7 +156,6 @@ if __name__ == '__main__':
                 print 'end building'
 
             publisher.debug("{} queue is empty, waiting".format(config_section))
-            print 'sleeping'
             time.sleep(5*60)
             continue
 

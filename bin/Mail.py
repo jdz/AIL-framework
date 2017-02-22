@@ -75,7 +75,6 @@ if __name__ == "__main__":
 
         else:
             publisher.debug("Script Mails is Idling 10s")
-            print 'Sleeping'
             time.sleep(10)
 
         message = p.get_from_set()

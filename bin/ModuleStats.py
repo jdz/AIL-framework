@@ -149,7 +149,6 @@ if __name__ == '__main__':
 
         if message is None:
             publisher.debug("{} queue is empty, waiting".format(config_section))
-            print 'sleeping'
             time.sleep(20)
             continue
 

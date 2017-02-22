@@ -67,4 +67,3 @@ if __name__ == "__main__":
         else:
             publisher.debug("Tokeniser is idling 10s")
             time.sleep(10)
-            print "sleepin"

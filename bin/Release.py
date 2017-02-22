@@ -24,7 +24,6 @@ if __name__ == "__main__":
         filepath = p.get_from_set()
         if filepath is None:
             publisher.debug("Script Release is Idling 10s")
-            print 'Sleeping'
             time.sleep(10)
             continue
 
