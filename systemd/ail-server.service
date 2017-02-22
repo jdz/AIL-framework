@@ -1,0 +1,18 @@
+# -*- mode: conf; -*-
+[Unit]
+AssertPathExists=%h/AIL/AILENV/bin/python
+AssertPathExists=%h/AIL/var/www/Flask_server.py
+After=redis-6380.service
+BindsTo=redis-6380.service
+
+[Service]
+WorkingDirectory=%h/AIL/var/www
+EnvironmentFile=%h/AIL/systemd/environment
+ExecStart=/home/ail/AIL/AILENV/bin/python Flask_server.py
+SyslogIdentifier=ail-server
+Restart=always
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

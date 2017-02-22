@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/home/ail/AIL/AILENV/bin/python
 # -*-coding:UTF-8 -*
 
 import socks

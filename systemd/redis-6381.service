@@ -1,0 +1,13 @@
+# -*- mode: conf; -*-
+[Unit]
+AssertPathExists=%h/AIL
+
+[Service]
+WorkingDirectory=%h/AIL
+ExecStart=/home/ail/AIL/redis/src/redis-server %h/AIL/configs/6381.conf
+Restart=always
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

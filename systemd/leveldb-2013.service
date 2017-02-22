@@ -1,0 +1,13 @@
+# -*- mode: conf; -*-
+[Unit]
+AssertPathExists=%h/AIL/LEVEL_DB_DATA/2013
+
+[Service]
+WorkingDirectory=%h/AIL/LEVEL_DB_DATA/2013
+ExecStart=/home/ail/AIL/redis-leveldb/redis-leveldb -H 127.0.0.1 -D %h/AIL/LEVEL_DB_DATA/2013/ -P 2013 -M 13
+Restart=always
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,7 @@
+AIL_HOME=/home/ail/AIL
+AIL_BIN=/home/ail/AIL/bin/
+AIL_FLASK=/home/ail/AIL/var/www/
+AIL_REDIS=/home/ail/AIL/redis/src/
+AIL_LEVELDB=/home/ail/AIL/redis-leveldb/
+PATH=/home/ail/AIL/AILENV/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:
+TZ=:/etc/localtime

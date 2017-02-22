@@ -1,0 +1,18 @@
+# -*- mode: conf; -*-
+[Unit]
+After=redis-6380.service
+BindsTo=redis-6380.service
+AssertPathExists=%h/AIL/AILENV/bin/log_subscriber
+AssertPathExists=%h/AIL/logs
+
+[Service]
+WorkingDirectory=%h/AIL/logs
+EnvironmentFile=%h/AIL/systemd/environment
+ExecStart=/home/ail/AIL/AILENV/bin/log_subscriber -p 6380 -c Script -l %h/AIL/logs/
+SyslogIdentifier=ail-script-log
+Restart=always
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target
