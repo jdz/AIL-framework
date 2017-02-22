@@ -301,7 +301,7 @@ function create_queue_table() {
     table.appendChild(tableBody);
     var heading = new Array();
     heading[0] = "Queue Name.PID"
-    heading[1] = "Amount"
+    heading[1] = "Size"
     var tr = document.createElement('TR');
     tableHead.appendChild(tr);
 
