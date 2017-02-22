@@ -169,6 +169,7 @@ def get_color(time, idle):
 def waiting_refresh():
     global last_refresh
     if time.time() - last_refresh < args.refresh:
+        time.sleep(0.1)
         return False
     else:
         last_refresh = time.time()
