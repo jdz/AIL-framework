@@ -170,7 +170,7 @@ if __name__ == '__main__':
                 print "Empty Paste: not processed"
                 publisher.debug("Empty Paste: {0} not processed".format(message))
         else:
-            print "Empty Queues: Waiting..."
+            publisher.debug("Empty Queues: Waiting...")
             if int(time.time() - time_1) > refresh_time:
                 print processed_paste_per_feeder
                 to_print = 'Mixer; ; ; ;mixer_all All_feeders Processed {0} paste(s) in {1}sec'.format(processed_paste, refresh_time)

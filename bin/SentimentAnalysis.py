@@ -109,11 +109,15 @@ def Analyse(message, server):
             provider_timestamp = provider + '_' + str(timestamp)
             server.incr('UniqID')
             UniqID = server.get('UniqID')
-            print provider_timestamp, '->', UniqID, 'dropped', num_line_removed, 'lines'
+            publisher.debug("{} -> {} dropped {} lines".format(
+                provider_timestamp,
+                UniqID,
+                num_line_removed,
+            ))
             server.sadd(provider_timestamp, UniqID)
             server.set(UniqID, avg_score)
     else:
-        print 'Dropped:', p_MimeType
+        publisher.debug('Dropped: ' + p_MimeType)
 
 
 def isJSON(content):

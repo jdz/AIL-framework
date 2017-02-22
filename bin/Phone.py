@@ -21,7 +21,7 @@ def search_phone(message):
 
     # if the list is greater than 4, we consider the Paste may contain a list of phone numbers
     if len(results) > 4:
-        print results
+        publisher.debug(results)
         publisher.warning('{} contains PID (phone numbers)'.format(paste.p_name))
         #send to Browse_warning_paste
         p.populate_set_out('phone;{}'.format(message), 'BrowseWarningPaste')

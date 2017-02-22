@@ -50,7 +50,6 @@ if __name__ == "__main__":
 
     while True:
         message = p.get_from_set()
-        print message
         if message is not None:
             paste = Paste.Paste(message)
             signal.alarm(5)

@@ -61,7 +61,6 @@ if __name__ == '__main__':
     while True:
         try:
             message = p.get_from_set()
-            print message
             if message is not None:
                 PST = Paste.Paste(message)
             else:
