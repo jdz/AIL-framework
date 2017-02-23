@@ -148,29 +148,26 @@ class Process(object):
         self.r_temp.hset('queues', self.subscriber_name,
                          int(self.r_temp.scard(in_set)))
         message = self.r_temp.spop(in_set)
-        timestamp = int(time.mktime(datetime.datetime.now().timetuple()))
-        dir_name = os.environ['AIL_HOME']+self.config.get('Directories', 'pastes')
-
         if message is None:
             return None
 
-        else:
-            try:
-                if ".gz" in message:
-                    path = message.split(".")[-2].split("/")[-1]
-                else:
-                    path = "?"
-                value = str(timestamp) + ", " + path
-                self.r_temp.set("MODULE_"+self.subscriber_name + "_" + str(self.moduleNum), value)
-                self.r_temp.sadd("MODULE_TYPE_"+self.subscriber_name, str(self.moduleNum))
-                return message
-
-            except:
+        timestamp = int(time.mktime(datetime.datetime.now().timetuple()))
+        try:
+            if ".gz" in message:
+                path = message.split(".")[-2].split("/")[-1]
+            else:
                 path = "?"
-                value = str(timestamp) + ", " + path
-                self.r_temp.set("MODULE_"+self.subscriber_name + "_" + str(self.moduleNum), value)
-                self.r_temp.sadd("MODULE_TYPE_"+self.subscriber_name, str(self.moduleNum))
-                return message
+            value = str(timestamp) + ", " + path
+            self.r_temp.set("MODULE_"+self.subscriber_name + "_" + str(self.moduleNum), value)
+            self.r_temp.sadd("MODULE_TYPE_"+self.subscriber_name, str(self.moduleNum))
+            return message
+
+        except:
+            path = "?"
+            value = str(timestamp) + ", " + path
+            self.r_temp.set("MODULE_"+self.subscriber_name + "_" + str(self.moduleNum), value)
+            self.r_temp.sadd("MODULE_TYPE_"+self.subscriber_name, str(self.moduleNum))
+            return message
 
     def populate_set_out(self, msg, channel=None):
         # multiproc
