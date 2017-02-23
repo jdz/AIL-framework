@@ -113,11 +113,11 @@ port = 2016
 db = 1
 
 [Url]
-cc_critical = DE
+cc_critical = LV
 
 [DomClassifier]
-cc = DE
-cc_tld = r'\.de$'
+cc = LV
+cc_tld = r'\.lv$'
 
 # Indexer configuration
 [Indexer]
