@@ -7,6 +7,7 @@
 import json
 
 import datetime
+import time
 import flask
 from flask import Flask, render_template, jsonify, request
 
@@ -30,22 +31,24 @@ def event_stream():
 def get_queues(r):
     # We may want to put the llen in a pipeline to do only one query.
     newData = []
+    now = int(time.mktime(datetime.datetime.now().timetuple()))
     for queue, card in r.hgetall("queues").iteritems():
+        try:
+            card = int(card)
+        except ValueError:
+            card = -1
+
         key = "MODULE_" + queue + "_"
         keySet = "MODULE_TYPE_" + queue
 
         for moduleNum in r.smembers(keySet):
-    
             value = r.get(key + str(moduleNum))
-            if value is not None:
-                timestamp, path = value.split(", ")
-                if timestamp is not None:
-                    startTime_readable = datetime.datetime.fromtimestamp(int(timestamp))
-                    processed_time_readable = str((datetime.datetime.now() - startTime_readable)).split('.')[0]
-                    seconds = int((datetime.datetime.now() - startTime_readable).total_seconds())
-                    newData.append( (queue, card, seconds, moduleNum) )
-                else:
-                    newData.append( (queue, cards, 0, moduleNum) )
+            if not value:
+                continue
+
+            timestamp, path = value.split(", ")
+            seconds = now - int(timestamp)
+            newData.append((queue, card, seconds, moduleNum))
 
     return newData
 
