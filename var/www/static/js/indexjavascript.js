@@ -325,29 +325,52 @@ function create_queue_table() {
         tableBody.appendChild(tr);
     }
     else {
-        for(i = 0; i < (glob_tabvar.row1).length;i++){
+        function add_row(i, row) {
             var tr = document.createElement('TR')
             for(j = 0; j < 2; j++){
                 var td = document.createElement('TD')
-                var moduleNum = j == 0 ? "." + glob_tabvar.row1[i][3] : "";
-                td.appendChild(document.createTextNode(glob_tabvar.row1[i][j] + moduleNum));
+                var moduleNum = j == 0 ? "." + row[3] : "";
+                td.appendChild(document.createTextNode(row[j] + moduleNum));
                 tr.appendChild(td)
             }
+
             // Used to decide the color of the row
-            // We have glob_tabvar.row1[][j] with:
+            // We have row[j] with:
             // - j=0: ModuleName
             // - j=1: queueLength
             // - j=2: LastProcessedPasteTime
             // - j=3: Number of the module belonging in the same category
-            if (parseInt(glob_tabvar.row1[i][2]) > window.threshold_stucked_module && parseInt(glob_tabvar.row1[i][1]) > 2)
+            if (window.threshold_stucked_module <= row[2] && row[1] != 0)
                 tr.className += " danger";
-            else if (parseInt(glob_tabvar.row1[i][1]) == 0)
+            else if (row[1] == 0)
                 tr.className += " warning";
             else
                 tr.className += " success";
+
             tableBody.appendChild(tr);
         }
+
+        function q_size_order_fn(a, b) { return b[1] - a[1]; }
+        function q_activity_order_fn(a, b) { return a[2] - b[2]; }
+
+        var stuck = jQuery.grep(glob_tabvar.row1, function(row) {
+                        return (row[1] != 0 &&
+                                window.threshold_stucked_module <= row[2]);
+                    }).sort(q_size_order_fn);
+        jQuery.each(stuck, add_row);
+
+        var busy = jQuery.grep(glob_tabvar.row1, function(row) {
+                       return (row[1] != 0 &&
+                               row[2] < window.threshold_stucked_module);
+                   }).sort(q_size_order_fn);
+        jQuery.each(busy, add_row);
+
+        var idle = jQuery.grep(glob_tabvar.row1, function(row) {
+                       return row[1] == 0;
+                   }).sort(q_activity_order_fn);
+        jQuery.each(idle, add_row);
     }
+
     Tablediv.appendChild(table);
 }
 
