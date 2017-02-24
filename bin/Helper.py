@@ -14,6 +14,7 @@ the same Subscriber name in both of them.
 import redis
 import ConfigParser
 import os
+import errno
 import zmq
 import time
 import datetime
@@ -112,7 +113,10 @@ class Process(object):
             raise Exception('Unable to find the configuration file. \
                             Did you set environment variables? \
                             Or activate the virtualenv.')
-        modulesfile = os.path.join(os.environ['AIL_BIN'], 'packages/modules.cfg')
+        modulesfile = os.path.join(
+            os.environ['AIL_BIN'],
+            'packages/modules.cfg',
+        )
         self.config = ConfigParser.ConfigParser()
         self.config.read(configfile)
         self.modules = ConfigParser.ConfigParser()
@@ -130,7 +134,37 @@ class Process(object):
             db=self.config.get('RedisPubSub', 'db'))
 
         self.moduleNum = os.getpid()
+        self.clean_up_queues()
 
+    def clean_up_queues(self):
+        dead = []
+
+        key = "MODULE_TYPE_" + self.subscriber_name
+        for pid in self.r_temp.smembers(key):
+            try:
+                os.kill(int(pid), 0)
+            except OSError as e:
+                if e.errno == errno.ESRCH:
+                    print("Found dead {} instance: {}".format(
+                        self.subscriber_name,
+                        pid,
+                    ))
+                    dead.append(pid)
+            except ValueError:
+                print("Invalid {} pid: {}".format(self.subscriber_name, pid))
+
+        if dead:
+            pipe = self.r_temp.pipeline()
+            pipe.srem(key, dead)
+            for pid in dead:
+                pipe.delete(self.module_queue(pid))
+            pipe.execute()
+
+    def module_queue(self, pid=None):
+        return "MODULE_{}_{}".format(
+            self.subscriber_name,
+            pid or self.moduleNum,
+        )
 
     def populate_set_in(self):
         # monoproc
@@ -152,22 +186,14 @@ class Process(object):
             return None
 
         timestamp = int(time.mktime(datetime.datetime.now().timetuple()))
-        try:
-            if ".gz" in message:
-                path = message.split(".")[-2].split("/")[-1]
-            else:
-                path = "?"
-            value = str(timestamp) + ", " + path
-            self.r_temp.set("MODULE_"+self.subscriber_name + "_" + str(self.moduleNum), value)
-            self.r_temp.sadd("MODULE_TYPE_"+self.subscriber_name, str(self.moduleNum))
-            return message
-
-        except:
-            path = "?"
-            value = str(timestamp) + ", " + path
-            self.r_temp.set("MODULE_"+self.subscriber_name + "_" + str(self.moduleNum), value)
-            self.r_temp.sadd("MODULE_TYPE_"+self.subscriber_name, str(self.moduleNum))
-            return message
+        basename = os.path.basename(message) or "?"
+        value = str(timestamp) + ", " + basename
+        self.r_temp.set(self.module_queue(), value)
+        self.r_temp.sadd(
+            "MODULE_TYPE_" + self.subscriber_name,
+            str(self.moduleNum),
+        )
+        return message
 
     def populate_set_out(self, msg, channel=None):
         # multiproc
