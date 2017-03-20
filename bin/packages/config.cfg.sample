@@ -87,25 +87,25 @@ host = localhost
 port = 6382
 db = 1
 
-[Redis_Level_DB_Sentiment]
-host = localhost
-port = 6382
-db = 4
-
 [Redis_Level_DB_TermFreq]
 host = localhost
 port = 6382
 db = 2
 
-[Redis_Level_DB]
-host = localhost
-port = 2016
-db = 0
-
 [Redis_Level_DB_Trending]
 host = localhost
 port = 6382
 db = 3
+
+[Redis_Level_DB_Sentiment]
+host = localhost
+port = 6382
+db = 4
+
+[Redis_Level_DB]
+host = localhost
+port = 2016
+db = 0
 
 [Redis_Level_DB_Hashs]
 host = localhost
